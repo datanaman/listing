@@ -55,7 +55,31 @@ h1{font-size:30px;margin:0 0 6px;letter-spacing:-0.3px}
 .feature-grid li strong{display:block;color:var(--muted);font-weight:600}
 .sidebar{background:var(--card);padding:18px;border-radius:12px;border:1px solid rgba(15,23,36,0.04);height:fit-content;box-shadow:0 8px 24px rgba(2,6,23,0.04)}
 .agent-card{display:flex;gap:12px;align-items:center}
-.agent-photo{width:72px;height:72px;border-radius:12px;background:linear-gradient(180deg,#f3f9f8,#e6fbfa);box-shadow:0 8px 30px rgba(2,6,23,0.06)}
+.agent-photo{
+  width:72px;
+  height:72px;
+  border-radius:50%;
+  background:linear-gradient(180deg, rgba(14,165,163,0.12), rgba(6,182,164,0.08));
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 8px 30px rgba(2,6,23,0.06);
+  flex:0 0 72px;
+}
+.agent-photo svg{width:44px;height:44px;display:block}
+/* lively hover + focus state for the owner icon */
+.agent-photo{
+  transition:transform 200ms cubic-bezier(.2,.9,.2,1), box-shadow 200ms ease, outline 160ms ease;
+}
+.agent-photo:hover,
+.agent-photo:focus,
+.agent-photo:active{
+  transform:translateY(-3px) scale(1.03);
+  box-shadow:0 18px 40px rgba(6,182,164,0.16);
+  outline: 3px solid rgba(14,165,163,0.10);
+  outline-offset:3px;
+}
+.agent-photo svg path, .agent-photo svg circle{mix-blend-mode:normal}
 .phone{font-weight:800}
 .finance{margin-top:18px}
 .finance .large{font-size:20px;font-weight:700;color:var(--accent)}
@@ -64,6 +88,11 @@ h1{font-size:30px;margin:0 0 6px;letter-spacing:-0.3px}
 .btn.outline{background:transparent;border:1px solid rgba(15,23,36,0.06);padding:10px;border-radius:10px}
 .map-note{grid-column:1/-1;margin-top:16px;background:var(--card);padding:14px;border-radius:10px}
 .footer{text-align:center;padding:18px;color:var(--muted);font-size:13px}
+
+/* WhatsApp variant */
+.btn.whatsapp{background:#25D366;color:#fff;border:none}
+.btn.whatsapp:hover{filter:brightness(0.96)}
+.email.whatsapp{display:inline-block;margin-top:8px;color:var(--accent);font-weight:700}
 
 /* price breakdown table */
 .price-breakdown{width:100%;border-collapse:collapse;margin-top:12px}
