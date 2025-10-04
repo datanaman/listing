@@ -60,9 +60,32 @@ document.addEventListener('DOMContentLoaded', ()=>{
     if(navigator.share){
       navigator.share({title:document.title,text:'Check out this home: 10867 Farmstead Mill Lane Gln — $529k',url:location.href});
     } else {
-      navigator.clipboard.writeText(location.href).then(()=> alert('Link copied to clipboard'));
+      // Build WhatsApp share as a fallback so mobile users can open WhatsApp with a rich message
+      const title = document.title;
+      const descEl = document.querySelector('.lead');
+      const desc = descEl ? descEl.textContent.trim() : '';
+      const priceEl = document.getElementById('ownerPrice');
+      const price = priceEl ? priceEl.textContent.trim() : '';
+      const message = `${title}\n${price}\n${desc}\n${location.href}`;
+      const waLink = `https://wa.me/?text=${encodeURIComponent(message)}`;
+      // Try opening WhatsApp in a new tab/window; if blocked, copy link to clipboard
+      const opened = window.open(waLink, '_blank');
+      if(!opened) navigator.clipboard.writeText(waLink).then(()=> alert('WhatsApp share link copied to clipboard'));
     }
   });
+
+  // Ensure Open Graph tags have absolute URLs (useful when the page is hosted)
+  try{
+    const ogUrl = document.querySelector('meta[property="og:url"]');
+    const ogImage = document.querySelector('meta[property="og:image"]');
+    if(ogUrl) ogUrl.content = location.href;
+    if(ogImage){
+      // if an images/image1.jpg exists, convert to absolute URL
+      const imgCandidate = 'images/image1.jpg';
+      const abs = new URL(imgCandidate, location.href).href;
+      ogImage.content = abs;
+    }
+  }catch(e){console.warn('OG tags setup failed',e)}
 
   // Print flyer
   const printBtn = document.getElementById('printBtn');
