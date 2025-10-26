@@ -1,57 +1,55 @@
 document.addEventListener('DOMContentLoaded', ()=>{
-  const track = document.getElementById('carousel-track');
-  const thumbs = document.getElementById('thumbs');
-  const images = [];
-  // try to load images named image1.jpg..image8.jpg from ./images
-  for(let i=1;i<=8;i++){
-    const url = `images/image${i}.jpg`;
-    images.push(url);
-  }
+  // Replace custom carousel with Swiper
+  const exts = ['jpg','jpeg','png','webp'];
+  const maxImages = 12;
 
-  // Utility: check image exists
   function imageExists(src){
     return new Promise(resolve=>{
-      const img=new Image();img.onload=()=>resolve(true);img.onerror=()=>resolve(false);img.src=src;
+      const img = new Image(); img.onload = ()=> resolve(true); img.onerror = ()=> resolve(false); img.src = src;
     });
   }
 
-  async function buildCarousel(){
+  async function initSwiper(){
     const available = [];
-    for(const src of images){
-      if(await imageExists(src)) available.push(src);
+    for(let i=1;i<=maxImages;i++){
+      for(const ext of exts){
+        const candidate = `images/image${i}.${ext}`;
+        // eslint-disable-next-line no-await-in-loop
+        if(await imageExists(candidate)){
+          available.push(candidate);
+          break;
+        }
+      }
     }
 
-    track.innerHTML='';thumbs.innerHTML='';
-    if(available.length===0){
-      const placeholder=document.createElement('div');placeholder.className='slide placeholder';placeholder.textContent='No images found. Add photos to /images as image1.jpg, image2.jpg, ...';track.appendChild(placeholder);return;
+    const mainWrapper = document.getElementById('swiper-wrapper');
+    const thumbsWrapper = document.getElementById('thumbs-wrapper');
+    mainWrapper.innerHTML = '';
+    thumbsWrapper.innerHTML = '';
+
+    if(available.length === 0){
+      mainWrapper.innerHTML = '<div class="swiper-slide placeholder">Add photos to /images as image1.jpg, image2.jpg, ...</div>';
+      return;
     }
 
-    available.forEach((src,idx)=>{
-      const slide=document.createElement('div');slide.className='slide';slide.style.backgroundImage=`url(${src})`;
-      track.appendChild(slide);
-      const timg=document.createElement('img');timg.src=src;timg.dataset.index=idx; if(idx===0) timg.classList.add('active');
-      timg.addEventListener('click', ()=>{goTo(idx)});
-      thumbs.appendChild(timg);
+    available.forEach(src => {
+      const slide = document.createElement('div');
+      slide.className = 'swiper-slide';
+      slide.innerHTML = `<div class="slide" style="background-image:url('${src}')"></div>`;
+      mainWrapper.appendChild(slide);
+
+      const thumb = document.createElement('div');
+      thumb.className = 'swiper-slide';
+      thumb.innerHTML = `<img src="${src}" alt="thumb" style="width:60px;height:40px;object-fit:cover;border-radius:6px"/>`;
+      thumbsWrapper.appendChild(thumb);
     });
 
-    let current=0;
-    const slides=track.children;
-
-    function update(){
-      track.style.transform = `translateX(-${current*100}%)`;
-      Array.from(thumbs.children).forEach((t,i)=> t.classList.toggle('active', i===current));
-    }
-
-    window.goTo = function(i){ current = (i+slides.length)%slides.length; update(); }
-
-    document.querySelector('.carousel-nav.prev').addEventListener('click', ()=>{ goTo(current-1); });
-    document.querySelector('.carousel-nav.next').addEventListener('click', ()=>{ goTo(current+1); });
-
-    // Auto-advance
-    setInterval(()=>{ goTo(current+1); }, 4500);
+    // init Swiper (script included via CDN in index.html)
+    const thumbsSwiper = new Swiper('.thumbs-swiper',{ spaceBetween:8, slidesPerView: Math.min(available.length, 8), watchSlidesProgress:true, freeMode:true });
+    const mainSwiper = new Swiper('.main-swiper',{ spaceBetween:10, navigation:{ nextEl:'.swiper-button-next', prevEl:'.swiper-button-prev' }, thumbs: { swiper: thumbsSwiper }, loop:true, autoplay: { delay:4500, disableOnInteraction:false } });
   }
 
-  buildCarousel();
+  initSwiper();
 
   // Share
   const shareBtn = document.getElementById('shareBtn');

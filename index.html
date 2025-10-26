@@ -16,6 +16,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <!-- Swiper CSS (carousel library) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
   <!-- Open Graph / Twitter meta for rich link previews (WhatsApp reads these) -->
   <meta property="og:type" content="article">
   <meta property="og:title" content="10867 Farmstead Mill Lane Gln — Glen Allen, VA • For Sale">
@@ -58,15 +60,22 @@
       </div>
     </div>
     <div class="hero-right">
-      <div class="carousel" id="carousel">
-        <button class="carousel-nav prev" aria-label="Previous">‹</button>
-        <div class="carousel-track" id="carousel-track">
-          <!-- Drop your images into ./images and name them image1.jpg, image2.jpg, ... Replaced below by JS if available -->
-          <div class="slide placeholder">Add your photos to the <code>/images</code> folder</div>
+      <!-- Swiper main carousel -->
+      <div class="carousel">
+        <div class="swiper main-swiper">
+          <div class="swiper-wrapper" id="swiper-wrapper">
+            <!-- slides inserted by JS -->
+            <div class="swiper-slide placeholder">Add your photos to the <code>/images</code> folder</div>
+          </div>
+          <div class="swiper-button-prev" aria-label="Previous"></div>
+          <div class="swiper-button-next" aria-label="Next"></div>
         </div>
-        <button class="carousel-nav next" aria-label="Next">›</button>
+
+        <!-- thumbnails swiper -->
+        <div class="swiper thumbs-swiper" id="thumbs-swiper">
+          <div class="swiper-wrapper" id="thumbs-wrapper"></div>
+        </div>
       </div>
-      <div class="thumbs" id="thumbs"></div>
     </div>
   </header>
 
@@ -172,6 +181,7 @@
     <small>Information compiled from public records and listing details. Verify all data with the owner. © Listing flyer generated for sharing.</small>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

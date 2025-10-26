@@ -39,9 +39,9 @@ h1{font-size:30px;margin:0 0 6px;letter-spacing:-0.3px}
 .btn.primary{background:var(--accent);color:#ffffff;box-shadow:0 12px 36px rgba(14,165,163,0.14);border:none;padding:12px 18px}
 .btn.ghost{background:transparent;border:1px dashed rgba(15,23,36,0.06)}
 .hero-right{width:460px}
-.carousel{background:var(--card);padding:12px;border-radius:12px;border:1px solid rgba(15,23,36,0.04);position:relative;box-shadow:0 12px 40px rgba(2,6,23,0.06)}
-.carousel-track{height:300px;display:flex;overflow:hidden;border-radius:8px;transition:transform 400ms ease}
-.slide{min-width:100%;height:300px;background-size:cover;background-position:center;display:flex;align-items:flex-end;padding:12px;color:#fff}
+.carousel{background:var(--card);padding:12px;border-radius:12px;border:1px solid rgba(15,23,36,0.04);position:relative;box-shadow:0 12px 40px rgba(2,6,23,0.06);width:100%}
+.carousel-track{height:300px;display:flex;overflow:hidden;border-radius:8px;transition:transform 400ms ease;width:100%}
+.slide{height:300px;background-size:cover;background-position:center;display:flex;align-items:flex-end;padding:12px;color:#fff;flex:0 0 auto}
 .slide.placeholder{display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:14px;background:linear-gradient(90deg, #e6eef6, #eef2ff);color:var(--muted)}
 .carousel-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(15,23,36,0.06);border:none;color:var(--text);width:36px;height:56px;border-radius:8px;cursor:pointer}
 .carousel-nav.prev{left:8px}
