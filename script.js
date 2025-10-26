@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     available.forEach(src => {
       const slide = document.createElement('div');
       slide.className = 'swiper-slide';
-      slide.innerHTML = `<div class="slide" style="background-image:url('${src}')"></div>`;
+  slide.innerHTML = `<div class="slide" style="background-image:url('${src}')" data-src="${src}"></div>`;
       mainWrapper.appendChild(slide);
 
       const thumb = document.createElement('div');
@@ -47,9 +47,69 @@ document.addEventListener('DOMContentLoaded', ()=>{
     // init Swiper (script included via CDN in index.html)
     const thumbsSwiper = new Swiper('.thumbs-swiper',{ spaceBetween:8, slidesPerView: Math.min(available.length, 8), watchSlidesProgress:true, freeMode:true });
     const mainSwiper = new Swiper('.main-swiper',{ spaceBetween:10, navigation:{ nextEl:'.swiper-button-next', prevEl:'.swiper-button-prev' }, thumbs: { swiper: thumbsSwiper }, loop:true, autoplay: { delay:4500, disableOnInteraction:false } });
+
+    // expose available images for other UI actions (lightbox/download)
+    window.__galleryImages = available;
+
+    // add click handlers to open lightbox when a slide or thumbnail is clicked
+    const openLightbox = (index)=>{
+      const images = window.__galleryImages || [];
+      if(!images.length) return;
+      currentLightboxIndex = ((index % images.length) + images.length) % images.length;
+      showLightboxAt(currentLightboxIndex);
+    };
+
+    // attach to main slides
+    const mainSlides = mainWrapper.querySelectorAll('.slide');
+    mainSlides.forEach((el, idx)=> el.addEventListener('click', ()=> openLightbox(idx)));
+
+    // attach to thumbs
+    const thumbs = thumbsWrapper.querySelectorAll('img');
+    thumbs.forEach((el, idx)=> el.addEventListener('click', ()=> openLightbox(idx)));
   }
 
   initSwiper();
+
+  // LIGHTBOX functionality
+  let currentLightboxIndex = 0;
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImage = document.getElementById('lightboxImage');
+  const lightboxClose = document.getElementById('lightboxClose');
+  const lightboxPrev = document.getElementById('lightboxPrev');
+  const lightboxNext = document.getElementById('lightboxNext');
+  const lightboxDownload = document.getElementById('lightboxDownload');
+
+  function showLightboxAt(index){
+    const images = window.__galleryImages || [];
+    if(!images.length) return;
+    currentLightboxIndex = ((index % images.length) + images.length) % images.length;
+    const src = images[currentLightboxIndex];
+    lightboxImage.src = src;
+    lightboxDownload.href = src;
+    lightboxDownload.setAttribute('download', src.split('/').pop());
+    lightbox.setAttribute('aria-hidden','false');
+  }
+
+  function closeLightbox(){
+    lightbox.setAttribute('aria-hidden','true');
+    lightboxImage.src = '';
+  }
+
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', (e)=>{ if(e.target===lightbox) closeLightbox(); });
+  lightboxPrev.addEventListener('click', ()=> showLightboxAt(currentLightboxIndex-1));
+  lightboxNext.addEventListener('click', ()=> showLightboxAt(currentLightboxIndex+1));
+
+  // keyboard navigation when lightbox open
+  document.addEventListener('keydown', (e)=>{
+    if(lightbox.getAttribute('aria-hidden') === 'false'){
+      if(e.key === 'ArrowLeft') showLightboxAt(currentLightboxIndex-1);
+      if(e.key === 'ArrowRight') showLightboxAt(currentLightboxIndex+1);
+      if(e.key === 'Escape') closeLightbox();
+    }
+  });
+
+  // (Download-all removed — per user request)
 
   // Share
   const shareBtn = document.getElementById('shareBtn');

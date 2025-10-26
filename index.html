@@ -183,5 +183,17 @@
 
   <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
   <script src="script.js"></script>
+  <!-- Lightbox markup (used by script.js) -->
+  <div id="lightbox" class="lightbox" aria-hidden="true">
+    <div class="lightbox-inner" role="dialog" aria-modal="true">
+      <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
+      <img id="lightboxImage" src="" alt="Photo" />
+      <div class="lightbox-controls">
+        <button id="lightboxPrev" class="btn outline" aria-label="Previous photo">◀</button>
+        <a id="lightboxDownload" class="btn" href="#" download>Download</a>
+        <button id="lightboxNext" class="btn outline" aria-label="Next photo">▶</button>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
